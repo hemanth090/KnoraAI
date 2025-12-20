@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode */
+@variant dark (&:where(.dark, .dark *));
+
+/* Custom theme configuration */
+@theme {
+  --color-primary: #18181b;
+  --color-primary-hover: #27272a;
+  --color-accent: #059669;
+  --color-background-light: #ffffff;
+  --color-background-dark: #09090b;
+  --color-background-subtle: #fafafa;
+  --color-surface-light: #f4f4f5;
+  --color-surface-dark: #18181b;
+  --color-border-light: #e4e4e7;
+  --color-border-dark: #27272a;
+
+  --font-display: "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+/* Base styles */
+html {
+  font-family: var(--font-display);
+}
+
+body {
+  @apply bg-background-light text-zinc-900 antialiased overflow-x-hidden;
+}
+
+.dark body {
+  @apply bg-background-dark text-zinc-100;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e4e4e7;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #27272a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4d4d8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulse animation for typing indicator */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Citation badge styles */
+.citation-badge {
+  @apply inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-zinc-100 text-zinc-700 hover:bg-zinc-200 cursor-pointer transition-colors;
+}
+
+.dark .citation-badge {
+  @apply bg-zinc-800 text-zinc-300 hover:bg-zinc-700;
+}
+
+/* Message bubble styles */
+.message-user {
+  @apply bg-primary text-white rounded-2xl rounded-br-md px-4 py-3;
+}
+
+.message-assistant {
+  @apply bg-zinc-100 text-zinc-900 rounded-2xl rounded-bl-md px-4 py-3;
+}
+
+.dark .message-assistant {
+  @apply bg-zinc-800 text-zinc-100;
+}
+
+/* Status badge variants */
+.status-pending {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-processing {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-ready {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-failed {
+  @apply bg-red-100 text-red-800;
+}
+
+.dark .status-pending {
+  @apply bg-yellow-900/30 text-yellow-400;
+}
+
+.dark .status-processing {
+  @apply bg-blue-900/30 text-blue-400;
+}
+
+.dark .status-ready {
+  @apply bg-green-900/30 text-green-400;
+}
+
+.dark .status-failed {
+  @apply bg-red-900/30 text-red-400;
+}
+
+/* Icon size utilities to avoid inline styles */
+.icon-sm {
+  font-size: 14px;
+}
+
+.icon-md {
+  font-size: 16px;
+}
+
+.icon-lg {
+  font-size: 18px;
+}
+
+.icon-xl {
+  font-size: 20px;
+}
+
+.icon-2xl {
+  font-size: 24px;
+}
+
+.icon-3xl {
+  font-size: 28px;
+}
+
+.icon-4xl {
+  font-size: 32px;
+}

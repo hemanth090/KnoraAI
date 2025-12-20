@@ -1,0 +1,3 @@
+"""
+Knora AI Backend Application.
+"""
