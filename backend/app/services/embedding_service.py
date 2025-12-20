@@ -27,8 +27,13 @@ class EmbeddingService:
         """
         self.model_name = model_name or settings.embedding_model
         self.model = None
-        self._load_model()
+        # Lazy load: self._load_model() called only when needed
     
+    def _ensure_model(self):
+        """Ensure model is loaded."""
+        if self.model is None:
+            self._load_model()
+
     def _load_model(self):
         """Load the embedding model."""
         try:
@@ -55,6 +60,7 @@ class EmbeddingService:
         if not text or not text.strip():
             raise ValueError("Cannot embed empty text")
         
+        self._ensure_model()
         embedding = self.model.encode(text, convert_to_numpy=True)
         return embedding.astype(np.float32)
     
@@ -76,6 +82,7 @@ class EmbeddingService:
         if not valid_texts:
             raise ValueError("All texts are empty")
         
+        self._ensure_model()
         embeddings = self.model.encode(
             valid_texts,
             convert_to_numpy=True,
@@ -102,15 +109,16 @@ class EmbeddingService:
         
         # For most sentence-transformers models, query and document
         # encoding is the same. Some BGE models use different prefixes.
-        if "bge" in self.model_name.lower():
             # BGE models use instruction prefix for queries
             query = f"Represent this sentence for searching relevant passages: {query}"
         
+        self._ensure_model()
         embedding = self.model.encode(query, convert_to_numpy=True)
         return embedding.astype(np.float32)
     
     def get_dimension(self) -> int:
         """Get the dimension of embeddings produced by this model."""
+        self._ensure_model()
         return self.embedding_dimension
     
     def compute_similarity(
