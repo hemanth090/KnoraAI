@@ -8,7 +8,8 @@ pypdf>=4.2.0
 pdfplumber>=0.11.0
 
 # Embeddings
-sentence-transformers>=2.7.0
+# Embeddings
+fastembed>=0.2.0
 numpy>=1.26.4
 
 # LLM Integration

@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     
     # Model settings
     llm_model: str = "llama3-70b-8192"
-    embedding_model: str = "all-MiniLM-L6-v2"
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dimension: int = 384  # Dimension for MiniLM
     
     # Server settings

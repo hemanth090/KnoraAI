@@ -7,7 +7,7 @@ Can be configured to use other models like bge-small-en-v1.5.
 import logging
 import numpy as np
 from typing import List, Union
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 from app.config import settings
 
@@ -37,11 +37,18 @@ class EmbeddingService:
     def _load_model(self):
         """Load the embedding model."""
         try:
-            logger.info(f"Loading embedding model: {self.model_name}")
-            self.model = SentenceTransformer(self.model_name)
-            self.embedding_dimension = self.model.get_sentence_embedding_dimension()
+            logger.info(f"Loading embedding model (fastembed): {self.model_name}")
+            # FastEmbed handles model download and ONNX runtime automatically
+            # It maps 'all-MiniLM-L6-v2' to a quantized ONNX version
+            self.model = TextEmbedding(model_name=self.model_name)
+            # FastEmbed doesn't strictly expose dimension property easily, 
+            # but all-MiniLM-L6-v2 is known to be 384.
+            # We can run a dummy encode to verify dimensions if needed.
+            dummy_emb = list(self.model.embed(["test"]))[0]
+            self.embedding_dimension = len(dummy_emb)
+            
             logger.info(
-                f"Loaded model with dimension: {self.embedding_dimension}"
+                f"Loaded fastembed model with dimension: {self.embedding_dimension}"
             )
         except Exception as e:
             logger.error(f"Failed to load embedding model: {e}")
@@ -61,7 +68,8 @@ class EmbeddingService:
             raise ValueError("Cannot embed empty text")
         
         self._ensure_model()
-        embedding = self.model.encode(text, convert_to_numpy=True)
+        # fastembed.embed returns a generator, convert to list then numpy
+        embedding = list(self.model.embed([text]))[0]
         return embedding.astype(np.float32)
     
     def embed_texts(self, texts: List[str]) -> np.ndarray:
@@ -83,13 +91,9 @@ class EmbeddingService:
             raise ValueError("All texts are empty")
         
         self._ensure_model()
-        embeddings = self.model.encode(
-            valid_texts,
-            convert_to_numpy=True,
-            show_progress_bar=len(valid_texts) > 10
-        )
-        
-        return embeddings.astype(np.float32)
+        # fastembed.embed returns a generator
+        embeddings_list = list(self.model.embed(valid_texts))
+        return np.array(embeddings_list, dtype=np.float32)
     
     def embed_query(self, query: str) -> np.ndarray:
         """
@@ -109,11 +113,13 @@ class EmbeddingService:
         
         # For most sentence-transformers models, query and document
         # encoding is the same. Some BGE models use different prefixes.
-            # BGE models use instruction prefix for queries
-            query = f"Represent this sentence for searching relevant passages: {query}"
+        if "bge" in self.model_name.lower():
+             # fastembed might handle this, but keeping manual prefix if raw model name used
+             query = f"Represent this sentence for searching relevant passages: {query}"
         
         self._ensure_model()
-        embedding = self.model.encode(query, convert_to_numpy=True)
+        # fastembed handles prefixing internally if using BGE, but for standard models we just pass text
+        embedding = list(self.model.embed([query]))[0]
         return embedding.astype(np.float32)
     
     def get_dimension(self) -> int:
