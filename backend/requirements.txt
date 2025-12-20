@@ -1,31 +1,31 @@
 # FastAPI and server
-fastapi==0.109.0
-uvicorn[standard]==0.27.0
-python-multipart==0.0.6
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
 
 # PDF Processing
-pypdf==4.0.1
-pdfplumber==0.10.3
+pypdf>=4.2.0
+pdfplumber>=0.11.0
 
 # Embeddings
 sentence-transformers>=2.7.0
-numpy==1.26.3
+numpy>=1.26.4
 
-# LLM Integration (OpenAI compatible)
-openai==1.10.0
-httpx==0.26.0
+# LLM Integration
+openai>=1.20.0
+httpx>=0.27.0
 
 # Database and Storage (Supabase)
-sqlalchemy==2.0.25
-asyncpg==0.30.0
-supabase==2.10.0
-pgvector==0.3.6
+sqlalchemy>=2.0.29
+asyncpg>=0.30.0
+supabase>=2.10.0
+pgvector>=0.3.6
 
 # Utilities
-python-dotenv==1.0.0
-pydantic==2.5.3
-pydantic-settings==2.1.0
-uuid6==2024.1.12
+python-dotenv>=1.0.1
+pydantic>=2.9.0
+pydantic-settings>=2.2.0
+uuid6>=2024.1.12
 
 # CORS
-starlette==0.35.1
+starlette>=0.37.0
