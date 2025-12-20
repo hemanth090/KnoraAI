@@ -9,12 +9,12 @@ import os
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     
-    # OpenAI settings
-    openai_api_key: str = ""
-    openai_base_url: Optional[str] = "https://api.openai.com/v1"
+    # Groq settings
+    groq_api_key: str = ""
+    groq_base_url: str = "https://api.groq.com/openai/v1"
     
     # Model settings
-    llm_model: str = "gpt-4-turbo-preview"
+    llm_model: str = "llama3-70b-8192"
     embedding_model: str = "all-MiniLM-L6-v2"
     embedding_dimension: int = 384  # Dimension for MiniLM
     

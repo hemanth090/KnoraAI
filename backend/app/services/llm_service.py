@@ -56,15 +56,15 @@ class LLMService:
             api_key: OpenAI API key
         """
         self.model = model or settings.llm_model
-        api_key = api_key or settings.openai_api_key
+        api_key = api_key or settings.groq_api_key
         
         if not api_key:
-            logger.warning("OpenAI API key not configured")
+            logger.warning("Groq API key not configured")
             self.client = None
         else:
             self.client = OpenAI(
                 api_key=api_key,
-                base_url=settings.openai_base_url
+                base_url=settings.groq_base_url
             )
         
         logger.info(f"LLM Service initialized with model: {self.model}")
@@ -90,7 +90,7 @@ class LLMService:
         """
         if not self.client:
             return {
-                "answer": "LLM service is not configured. Please set your OpenAI API key.",
+                "answer": "LLM service is not configured. Please set your Groq API key.",
                 "sources": []
             }
         
